@@ -5,7 +5,7 @@ Cohort Analysis on Order Level
 Cohort Analysis/Customer Retention Analysis on Customer Level
 Cohort Analysis on Number of Revenue
 Conclusion
-### Introduction
+## Introduction
 Cohort analysis is a powerful technique that allows us to gain a deeper understanding of customer behavior and business performance by organizing customers into groups based on a common characteristic or event. These groups, or cohorts, are usually formed based on the timing of a specific event, such as the customer's first purchase. By analyzing how cohorts of customers behave over time, we can identify trends, patterns, and potential areas for improvement in customer engagement and revenue generation.
 
 The retail dataset we use in this analysis consists of various attributes such as InvoiceNo, CustomerID, InvoiceDate, Quantity, UnitPrice, and more. By leveraging this dataset and Snowflake's SQL capabilities, we aim to answer key questions related to customer behavior and business success. Our cohort analysis involves categorizing customers into cohorts based on their first purchase month, and then observing their subsequent activities over a predefined period.
@@ -24,7 +24,7 @@ Examining revenue generation, this analysis investigates how revenue changes acr
 
 Through these comprehensive analyses, businesses gain insights into customer lifetime value, retention dynamics, and revenue patterns. These insights pave the way for data-driven strategies that optimize engagement, retention, and revenue, ultimately fostering business growth and customer satisfaction.
 
-### Cohort Analysis on Order Level
+## Cohort Analysis on Order Level
 The first cohort analysis focuses on order-level cohort analysis. We calculate the number of invoices for each cohort of customers based on their first purchase month.
 
 -- Create a new database named SALES
@@ -53,7 +53,7 @@ CREATE OR REPLACE TABLE RETAIL (
 );
 SELECT * FROM RETAIL LIMIT 5;
 ```
-Results of the query
+### Results of the query
 
 | INVOICENO | STOCKCODE | DESCRIPTION | QUANTITY | INVOICEDATE | UNITPRICE | CUSTOMERID | COUNTRY |
 | --------- | --------- | ----------- | -------- | ----------- | --------- | ---------- | ------- |
@@ -102,6 +102,7 @@ PIVOT (
 )
 ```
 ORDER BY FIRST_PURCHASE_MONTH;
+
 ### Results of the query
 
 | FIRST_PURCHASE_MONTH | 'Month_0' | 'Month_1' | 'Month_2' | 'Month_3' | 'Month_4' | 'Month_5' | 'Month_6' | 'Month_7' | 'Month_8'| 'Month_9' | 'Month_10' | 'Month_11' | 'Month_12' |
@@ -121,15 +122,15 @@ ORDER BY FIRST_PURCHASE_MONTH;
 | 2011-12-01 |	45 | 0 | | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 
-##Order Level Cohort Analysis Table Explanation
+## Order Level Cohort Analysis Table Explanation
 FIRST_PURCHASE_MONTH: This column indicates the month in which a cohort of customers made their first purchase.
 
 'Month_0', 'Month_1', 'Month_2', ..., 'Month_12': These columns represent the subsequent months following the customers' first purchase. For instance, 'Month_0' corresponds to the same month as the first purchase, 'Month_1' corresponds to the first month after the first purchase, 'Month_2' corresponds to the second month after the first purchase, and so forth.
 
-###Values in the Table: 
+### Values in the Table: 
 The numbers in each cell of the table reflect the count of invoices (transactions) carried out by the customers within the specific cohort during the corresponding month. For instance, if there is a value of 1,701 in the first row under 'Month_0', it means that the cohort of customers who made their initial purchase in December 2010 conducted 1,701 invoices (transactions) within the same month.
 
-###The cohort analysis serves as a powerful tool for comprehending customer behavior over time. When observing the table, several observations can be made:
+### The cohort analysis serves as a powerful tool for comprehending customer behavior over time. When observing the table, several observations can be made:
 
 Cohort December 2010 ('Month_0'): This cohort exhibited a substantial number of invoices (1,701) during their first month, which then gradually declined over the subsequent months.
 
@@ -148,10 +149,10 @@ This type of cohort analysis offers insights into how well businesses are retain
 
 By conducting this analysis, you can gain valuable insights into customer behavior, track changes in retention rates, and identify trends in customer loyalty. This information can guide decision-making processes related to customer engagement, marketing campaigns, and overall business strategies.
 
--- Cohort Analysis/Customer Retention Analysis on Customer Level
+## Cohort Analysis/Customer Retention Analysis on Customer Level
 
+```
 -- Step 1: Create a Common Table Expression (CTE) named CTE1 to prepare data
-'''
 WITH CTE1 AS (
     SELECT 
         InvoiceNo, CUSTOMERID, 
@@ -176,7 +177,6 @@ CTE3 AS (
         CONCAT('Month_', datediff('MONTH', FIRST_PURCHASE_MONTH, PURCHASE_MONTH)) AS COHORT_MONTH
     FROM CTE2
 )
-'''
 -- Final Query: Count distinct customers in each cohort for subsequent months
 SELECT FIRST_PURCHASE_MONTH as Cohort,
     COUNT(DISTINCT(IFF(COHORT_MONTH='Month_0', CUSTOMERID, NULL))) as "Month_0",
@@ -195,8 +195,9 @@ SELECT FIRST_PURCHASE_MONTH as Cohort,
 FROM CTE3
 GROUP BY FIRST_PURCHASE_MONTH
 ORDER BY FIRST_PURCHASE_MONTH;
-Result of the query
-'''
+```
+### Result of the query
+
 COHORT	  Month_0	 Month_1	Month_2	 Month_3	Month_4	 Month_5	 Month_6	 Month_7	Month_8	 Month_9	Month_10	Month_11	Month_12
 2010-12-01	945	    358	      313	     367	    340	     375	     360	     336	     333	    371	     354	     473	    260
 2011-01-01	419	    100      	118	     101	    138	     126	     109	     108	     129	    145      152	     63	         0
@@ -213,7 +214,7 @@ COHORT	  Month_0	 Month_1	Month_2	 Month_3	Month_4	 Month_5	 Month_6	 Month_7	Mo
 2011-12-01	41	      0	       0	       0	      0	       0	      0	           0	      0	        0	       0	      0	         0
 '''
 
-##Cohort Analysis/Customer Retention Analysis on Customer Level
+## Cohort Analysis/Customer Retention Analysis on Customer Level
 The following table presents the results of a cohort analysis focusing on customer-level retention. This analysis calculates the count of distinct customers within each cohort based on their first purchase month and subsequent months.
 
 Interpretation of the Table
@@ -240,13 +241,12 @@ Identifying cohorts that exhibit high or low retention rates.
 Adjusting marketing strategies and engagement initiatives based on cohort behavior.
 This analysis provides valuable information for optimizing customer engagement, retention strategies, and marketing efforts, ultimately contributing to business growth and customer satisfaction.
 
-Cohort Analysis on Number of Revenue
+## Cohort Analysis on Number of Revenue
 Cohort Analysis on Number of Revenue examines how revenue generated by different customer cohorts changes over time. Cohorts are categorized by their first purchase month, and subsequent monthly revenue is calculated. The outcomes are typically showcased in a table, illustrating revenue generated by each cohort in each month. This analysis helps uncover trends like initial spending spikes, revenue declines, or consistent growth. The insights gained can shape strategies to retain declining cohorts or capitalize on successful ones. It's a valuable tool for revenue optimization, tailored marketing, and enhancing customer lifetime value based on revenue patterns across distinct cohorts.
 
 -- Cohort Analysis on Number of Revenue
-
+```
 -- Creating a temporary table (CTE1) to calculate revenue from valid transactions
-'''
 WITH CTE1 AS
 (
     SELECT 
@@ -289,27 +289,28 @@ PIVOT(
         'Month_6','Month_7','Month_8','Month_9','Month_10','Month_11','Month_12'
     )
 )
-'''
-###ORDER BY Cohort;
-Result of the query
-'''
-COHORT	'Month_0'	'Month_1'	'Month_2'	'Month_3'	'Month_4'	'Month_5'	'Month_6'	'Month_7'	'Month_8'	'Month_9'	'Month_10'	'Month_11'	'Month_12'
-2010-12-01	66,676	25,436	25,398	32,723	24,483	33,929	34,524	24,225	22,651	40,927	55,317	53,117	18,593
-2011-01-01	18,890	4,158	5,732	4,638	8,181	5,995	5,237	5,611	5,954	7,679	11,947	3,417	
-2011-02-01	17,899	3,783	6,407	6,048	2,141	3,212	4,218	5,130	6,637	7,497	2,033		
-2011-03-01	14,855	3,884	6,641	4,626	3,045	3,109	6,268	7,160	9,064	2,190			
-2011-04-01	9,721	3,012	2,944	2,041	2,101	1,798	2,185	3,608	460				
-2011-05-01	12,767	2,901	2,812	2,620	2,132	2,484	3,032	890					
-2011-06-01	9,303	2,560	1,198	2,225	3,465	6,772	650						
-2011-07-01	-632	1,142	1,160	938	1,933	559							
-2011-08-01	4,994	62	-783	-2,036	-707								
-2011-09-01	12,110	1,998	3,212	1,003									
-2011-10-01	9,670	3,682	2,202										
-2011-11-01	13,651	3,190											
-2011-12-01	10,046	
-'''
+ORDER BY Cohort;
+```
+### Result of the query
 
-##Cohort Analysis on Number of Revenue
+| COHORT | 'Month_0' | 'Month_1' | 'Month_2' | 'Month_3' | 'Month_4' | 'Month_5' | 'Month_6' | 'Month_7' | 'Month_8' | 'Month_9' | 'Month_10' | 'Month_11' | 'Month_12' |
+| --------- | -------- | ----------- | ---------- | --------- | -------- | -------- | -------- | -------- | ---------- | -------- | ------- | --------- | --------- | 
+| 2010-12-01 | 66,676 | 25,436 | 25,398 | 32,723 | 24,483 | 33,929 | 34,524 | 24,225 | 22,651 | 40,927 | 55,317 | 53,117 | 18,593 |
+| 2011-01-01 | 18,890 | 4,158 | 5,732 | 4,638 | 8,181 | 5,995 | 5,237 | 5,611 | 5,954 | 7,679 | 11,947 | 3,417 |	
+| 2011-02-01 | 17,899 | 3,783 | 6,407 | 6,048 | 2,141 | 3,212 | 4,218 | 5,130 | 6,637 | 7,497 | 2,033 |		
+| 2011-03-01 | 14,855 | 3,884 | 6,641 | 4,626 | 3,045 | 3,109 | 6,268 | 7,160 | 9,064 | 2,190 |			
+| 2011-04-01 | 9,721 | 3,012 | 2,944 | 2,041 | 2,101 | 1,798 | 2,185 | 3,608 | 460 |				
+| 2011-05-01 | 12,767 | 2,901 | 2,812 | 2,620 | 2,132 | 2,484 | 3,032 | 890	|				
+| 2011-06-01 | 9,303 | 2,560 | 1,198 | 2,225 | 3,465 | 6,772 | 650 |						
+|2011-07-01 | -632 | 1,142 | 1,160 | 938 | 1,933 | 559 |							
+|2011-08-01 | 4,994 | 62 | -783 | -2,036 | -707 |								
+|2011-09-01 | 12,110 | 1,998 | 3,212 | 1,003 |									
+| 2011-10-01 | 9,670 | 3,682 | 2,202 |										
+| 2011-11-01 | 13,651 | 3,190 |											
+| 2011-12-01 | 10,046 |	
+
+
+## Cohort Analysis on Number of Revenue
 Cohort: The leftmost column represents the cohorts, segmented by the month in which customers made their first purchase.
 
 Months (Columns): The subsequent columns labeled 'Month_0' through 'Month_12' represent the months after the first purchase month, with 'Month_0' corresponding to the month of the first purchase, 'Month_1' corresponding to the first month after the first purchase, and so on.
@@ -326,7 +327,7 @@ Some cohorts, such as the December 2010 cohort, exhibit a relatively higher init
 Negative values in certain cells (like -632 under 'Month_0' for the July 2011 cohort) indicate a decline in revenue during those months compared to the initial month.
 The table illustrates changing revenue patterns for different cohorts over the months after their first purchase, providing insights into customer behavior and revenue generation trends.
 
-##Conclusion
+## Conclusion
 
 Cohort analysis is a powerful methodology that enables businesses to gain valuable insights into customer behavior, retention rates, revenue trends, and overall business performance. By segmenting customers into cohorts based on their common characteristics or events, such as their first purchase month, businesses can uncover patterns and make informed decisions to optimize customer engagement, marketing strategies, and revenue generation.
 
@@ -335,10 +336,10 @@ In this analysis, we used Snowflake SQL queries to perform cohort analysis on a 
 ##Order Level Analysis
 We analyzed the number of invoices (transactions) for different customer cohorts in subsequent months after their initial purchase. This analysis provided insights into customer engagement patterns, repeat purchases, and overall transaction behavior over time.
 
-##Customer Retention Analysis
+## Customer Retention Analysis
 By counting distinct customers in each cohort for subsequent months, we measured customer retention rates. This analysis allowed us to understand how well the business retains its customer base over time and identify trends in customer loyalty and engagement.
 
-##Revenue Analysis
+## Revenue Analysis
 We examined how revenue generated by various cohorts changes over time. This analysis showcased revenue patterns, including initial spending spikes, revenue declines, or consistent growth, which can be used to tailor marketing efforts and enhance customer lifetime value.
 
 In conclusion, cohort analysis serves as a critical tool for businesses to understand and respond effectively to customer behavior and revenue generation trends. By leveraging the insights gained from cohort analysis, businesses can make informed decisions, optimize their strategies, and ultimately achieve sustainable growth and success.
