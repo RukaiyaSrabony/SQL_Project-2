@@ -1,30 +1,30 @@
 # COHORT ANALYSIS
-##Table of Contents
+## Table of Contents
 Introduction
 Cohort Analysis on Order Level
 Cohort Analysis/Customer Retention Analysis on Customer Level
 Cohort Analysis on Number of Revenue
 Conclusion
-###Introduction
+### Introduction
 Cohort analysis is a powerful technique that allows us to gain a deeper understanding of customer behavior and business performance by organizing customers into groups based on a common characteristic or event. These groups, or cohorts, are usually formed based on the timing of a specific event, such as the customer's first purchase. By analyzing how cohorts of customers behave over time, we can identify trends, patterns, and potential areas for improvement in customer engagement and revenue generation.
 
 The retail dataset we use in this analysis consists of various attributes such as InvoiceNo, CustomerID, InvoiceDate, Quantity, UnitPrice, and more. By leveraging this dataset and Snowflake's SQL capabilities, we aim to answer key questions related to customer behavior and business success. Our cohort analysis involves categorizing customers into cohorts based on their first purchase month, and then observing their subsequent activities over a predefined period.
 
-###Purpose of Analysis
+### Purpose of Analysis
 The overarching purpose of this project lies in leveraging cohort analysis across multiple dimensions: order level, customer level, and revenue analysis. Through these distinct but interconnected analyses, the project aims to uncover crucial insights that illuminate customer behavior, retention dynamics, and revenue patterns.
 
-###Cohort Analysis on Order Level:
+### Cohort Analysis on Order Level:
 By categorizing customers into cohorts based on their initial purchase month, this analysis delves into understanding the distribution of invoices within these cohorts over subsequent months. This helps identify trends in transaction volumes, revealing whether certain cohorts exhibit sustained engagement or diminishing activity.
 
-###Cohort Analysis on Customer Level: 
+### Cohort Analysis on Customer Level: 
 Focusing on customer retention, this analysis tracks how cohorts evolve over time in terms of customer count. By observing how many customers remain active in each cohort, businesses can gauge the effectiveness of their retention strategies and pinpoint areas for improvement.
 
-###Cohort Analysis on Number of Revenues: 
+### Cohort Analysis on Number of Revenues: 
 Examining revenue generation, this analysis investigates how revenue changes across different cohorts over successive months. By analyzing revenue trends, businesses can identify cohorts that contribute significantly to revenue growth and those that require interventions to enhance their value.
 
 Through these comprehensive analyses, businesses gain insights into customer lifetime value, retention dynamics, and revenue patterns. These insights pave the way for data-driven strategies that optimize engagement, retention, and revenue, ultimately fostering business growth and customer satisfaction.
 
-###Cohort Analysis on Order Level
+### Cohort Analysis on Order Level
 The first cohort analysis focuses on order-level cohort analysis. We calculate the number of invoices for each cohort of customers based on their first purchase month.
 
 -- Create a new database named SALES
@@ -40,6 +40,7 @@ CREATE SCHEMA COHORT_ANALYSIS;
 USE SCHEMA COHORT_ANALYSIS;
 
 -- Create a table named RETAIL with various columns to store retail data
+```
 CREATE OR REPLACE TABLE RETAIL (
     InvoiceNo varchar (10),
     StockCode varchar(20),
@@ -51,9 +52,11 @@ CREATE OR REPLACE TABLE RETAIL (
     Country varchar(25)
 );
 SELECT * FROM RETAIL LIMIT 5;
+```
 Results of the query
-INVOICENO	STOCKCODE	DESCRIPTION	QUANTITY	INVOICEDATE	UNITPRICE	CUSTOMERID	COUNTRY
-536365	85123A	WHITE HANGING HEART T-LIGHT HOLDER	6	1/12/10 8:26	2.55	17850	United Kingdom
+
+INVOICENO	STOCKCODE	DESCRIPTION 	QUANTITY	INVOICEDATE	  UNITPRICE	    CUSTOMERID	COUNTRY
+536365	     85123A	   WHITE HANGING      HEART       T-LIGHT      HOLDER	   6	1/12/10 8:26	2.55	17850	United Kingdom
 536366	22633	HAND WARMER UNION JACK	6	1/12/10 8:28	1.85	17850	United Kingdom
 536367	84879	ASSORTED COLOUR BIRD ORNAMENT	32	1/12/10 8:34	1.69	13047	United Kingdom
 536368	22960	JAM MAKING SET WITH JARS	6	1/12/10 8:34	4.25	13047	United Kingdom
